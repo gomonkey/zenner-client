@@ -1,0 +1,21 @@
+{
+  "common": {
+    "appName": "Zenner",
+    "welcome": "Welcome back!",
+    "slogan": "Minimalist daily planner for distraction-free focus."
+  },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "username": "Username",
+    "password": "Password",
+    "usernamePlaceholder": "Enter your username",
+    "invalidCredentials": "Invalid username or password."
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "toggle": "Toggle theme"
+  }
+}

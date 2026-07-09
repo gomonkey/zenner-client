@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Xcode
 !**/*.xcodeproj
 !**/*.pbxproj
@@ -185,3 +186,60 @@ __pycache__/
 /packages/react-native/**/api/codegen
 /packages/react-native/**/.doxygen.config.*.generated
 /scripts/cxx-api/codegen
+=======
+# ===========================
+# Dependencies
+# ===========================
+node_modules
+
+# ===========================
+# Build Outputs
+# ===========================
+dist
+build
+.output
+*.tsbuildinfo
+
+# ===========================
+# Environment Variables
+# ===========================
+.env
+.env.local
+.env.*.local
+
+# ===========================
+# Logs
+# ===========================
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===========================
+# IDE & Editors
+# ===========================
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ===========================
+# OS Files
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# Antigravity IDE / AI Agent
+# ===========================
+.agents
+.harness
+.docs
+GEMINI.md
+skills-lock.json
+>>>>>>> 70ab393673826d174dbd312bbdd0384d368e75d2

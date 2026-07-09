@@ -1,0 +1,6 @@
+@import "../../../packages/ui/src/web/global.css";
+
+/* Base Tailwind classes will load after custom styles declaration layer */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
