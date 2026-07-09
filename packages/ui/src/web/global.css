@@ -1,0 +1,99 @@
+
+@layer base {
+  /* ===================== LIGHT MODE ===================== */
+  :root {
+    --background: 210 33% 97%;
+    --foreground: 220 26% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 26% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 26% 14%;
+
+    /* Zenner Blue — Sky Blue 500 */
+    --primary: 199 89% 48%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 30% 93%;
+    --secondary-foreground: 220 26% 14%;
+
+    --muted: 210 30% 93%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 199 89% 94%;
+    --accent-foreground: 199 89% 30%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: 199 89% 48%;
+
+    --radius: 0.75rem;
+
+    /* Shadow tokens */
+    --shadow-sm: 0 1px 2px hsl(220 26% 14% / 0.06);
+    --shadow-md: 0 4px 12px hsl(220 26% 14% / 0.10);
+    --shadow-lg: 0 8px 32px hsl(220 26% 14% / 0.14);
+  }
+
+  /* ===================== DARK MODE ===================== */
+  .dark {
+    /* Deep navy-dark, not pure black — premium feel */
+    --background: 222 28% 9%;
+    --foreground: 210 30% 94%;
+
+    --card: 222 26% 13%;
+    --card-foreground: 210 30% 94%;
+
+    --popover: 222 26% 13%;
+    --popover-foreground: 210 30% 94%;
+
+    /* Zenner Blue remains vibrant in dark */
+    --primary: 199 89% 52%;
+    --primary-foreground: 222 28% 9%;
+
+    --secondary: 222 24% 18%;
+    --secondary-foreground: 210 30% 94%;
+
+    --muted: 222 24% 18%;
+    --muted-foreground: 215 20% 58%;
+
+    --accent: 199 70% 20%;
+    --accent-foreground: 199 89% 72%;
+
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 222 22% 20%;
+    --input: 222 22% 20%;
+    --ring: 199 89% 52%;
+
+    /* Shadow tokens — subtler in dark */
+    --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.20);
+    --shadow-md: 0 4px 12px hsl(0 0% 0% / 0.35);
+    --shadow-lg: 0 8px 32px hsl(0 0% 0% / 0.50);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    /* Smooth theme transitions — only for non-initial load */
+    color-scheme: light dark;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  html.light {
+    color-scheme: light;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}

@@ -1,0 +1,55 @@
+# ===========================
+# Dependencies
+# ===========================
+node_modules
+
+# ===========================
+# Build Outputs
+# ===========================
+dist
+build
+.output
+*.tsbuildinfo
+
+# ===========================
+# Environment Variables
+# ===========================
+.env
+.env.local
+.env.*.local
+
+# ===========================
+# Logs
+# ===========================
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===========================
+# IDE & Editors
+# ===========================
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ===========================
+# OS Files
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# Antigravity IDE / AI Agent
+# ===========================
+.agents
+.harness
+.docs
+GEMINI.md
+skills-lock.json
