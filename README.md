@@ -71,4 +71,3 @@ For detailed specifications, see:
 1.  **Strict Performance (React Doctor)**: Prevent unnecessary re-renders in heavy list views (Daily View blocks). Always clean up subscriptions/listeners in hooks.
 2.  **Type Safety (Zod & TypeScript)**: Ensure all API payloads are validated with Zod schemas in the service layer before reaching components.
 3.  **Clean Components**: Keep UI components small and decoupled. Re-use Tailwind utility styles via `cn` helper merging.
-    > > > > > > > 70ab393673826d174dbd312bbdd0384d368e75d2
