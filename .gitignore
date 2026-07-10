@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Xcode
 !**/*.xcodeproj
 !**/*.pbxproj
@@ -186,7 +185,7 @@ __pycache__/
 /packages/react-native/**/api/codegen
 /packages/react-native/**/.doxygen.config.*.generated
 /scripts/cxx-api/codegen
-=======
+
 # ===========================
 # Dependencies
 # ===========================
@@ -242,4 +241,3 @@ desktop.ini
 .docs
 GEMINI.md
 skills-lock.json
->>>>>>> 70ab393673826d174dbd312bbdd0384d368e75d2

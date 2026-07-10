@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore, useThemeStore } from '@zenner/core/store/index';
 import { Login } from './pages/Login';
 import { Home } from './pages/Home';
+import { Register } from './pages/Register';
+import { ForgotPassword } from './pages/ForgotPassword';
 
 export function App() {
   const { isAuthenticated, isInitializing, checkAuth } = useAuthStore();
@@ -44,6 +46,14 @@ export function App() {
       <Route 
         path="/login" 
         element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} 
+      />
+      <Route 
+        path="/register" 
+        element={!isAuthenticated ? <Register /> : <Navigate to="/" replace />} 
+      />
+      <Route 
+        path="/forgot-password" 
+        element={!isAuthenticated ? <ForgotPassword /> : <Navigate to="/" replace />} 
       />
       <Route 
         path="/" 

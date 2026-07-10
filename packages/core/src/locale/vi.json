@@ -10,7 +10,17 @@
     "username": "Tên đăng nhập",
     "password": "Mật khẩu",
     "usernamePlaceholder": "Nhập tên đăng nhập của bạn",
-    "invalidCredentials": "Tên đăng nhập hoặc mật khẩu không đúng."
+    "invalidCredentials": "Tên đăng nhập hoặc mật khẩu không đúng.",
+    "forgotPassword": "Quên mật khẩu?",
+    "loginWithGoogle": "Tiếp tục với Google",
+    "dontHaveAccount": "Chưa có tài khoản?",
+    "or": "Hoặc",
+    "email": "Email",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "alreadyHaveAccount": "Đã có tài khoản?",
+    "backToLogin": "Quay lại Đăng nhập",
+    "sendResetLink": "Gửi liên kết đặt lại mật khẩu",
+    "forgotPasswordDescription": "Nhập địa chỉ email của bạn để nhận liên kết đặt lại mật khẩu."
   },
   "theme": {
     "light": "Sáng",

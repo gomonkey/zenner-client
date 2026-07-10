@@ -10,7 +10,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
-        outfit: ["Outfit", "sans-serif"]
+        outfit: ["Public Sans", "sans-serif"]
       },
       colors: {
         border: "hsl(var(--border))",
