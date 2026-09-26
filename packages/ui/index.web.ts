@@ -3,3 +3,6 @@ export { Input } from "./src/web/components/ui/input";
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from "./src/web/components/ui/card";
 export { Label } from "./src/web/components/ui/label";
 export { cn } from "./src/web/lib/utils";
+export { Timeblock } from "./src/web/components/Timeblock";
+export type { TimeblockEvent } from "./src/web/components/Timeblock";
+

@@ -27,5 +27,25 @@
     "dark": "Dark",
     "system": "System",
     "toggle": "Toggle theme"
+  },
+  "home": {
+    "logout": "Logout",
+    "selectedMonth": "Selected Month",
+    "date": "Date",
+    "todayTimeblock": "Today's Timeblock",
+    "dayMode": "DAY MODE",
+    "reminders": "Reminders",
+    "eisenhowerTitle": "Eisenhower Decision Matrix",
+    "urgent": "Urgent",
+    "notUrgent": "Not Urgent",
+    "important": "Important",
+    "unimportant": "Unimportant",
+    "taskDo": "Task (do)",
+    "when": "When",
+    "done": "Done",
+    "taskTodo": "Task (To-do)",
+    "taskDelegate": "Task (Delegate)",
+    "whoCanDoIt": "Who can do it for you ?",
+    "taskDelete": "Task (delete)"
   }
 }

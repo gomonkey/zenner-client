@@ -27,5 +27,25 @@
     "dark": "Tối",
     "system": "Hệ thống",
     "toggle": "Đổi giao diện"
+  },
+  "home": {
+    "logout": "Đăng xuất",
+    "selectedMonth": "Tháng đã chọn",
+    "date": "Ngày",
+    "todayTimeblock": "Lịch trình hôm nay",
+    "dayMode": "CHẾ ĐỘ NGÀY",
+    "reminders": "Nhắc nhở",
+    "eisenhowerTitle": "Ma trận Quyết định Eisenhower",
+    "urgent": "Khẩn cấp",
+    "notUrgent": "Không khẩn cấp",
+    "important": "Quan trọng",
+    "unimportant": "Không quan trọng",
+    "taskDo": "Nhiệm vụ (Làm ngay)",
+    "when": "Thời gian",
+    "done": "Xong",
+    "taskTodo": "Nhiệm vụ (Lên lịch)",
+    "taskDelegate": "Nhiệm vụ (Ủy quyền)",
+    "whoCanDoIt": "Ai có thể làm giúp bạn?",
+    "taskDelete": "Nhiệm vụ (Xóa bỏ)"
   }
 }
