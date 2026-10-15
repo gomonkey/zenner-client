@@ -6,6 +6,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{ts,tsx}",
-    "../../packages/ui/src/web/**/*.{ts,tsx}"
+    "../../packages/ui/src/web/**/*.{ts,tsx}",
+    "../../packages/core/src/**/*.{ts,tsx,json}"
   ],
 };

@@ -1,6 +1,7 @@
 {
   "extends": "./packages/shared-configs/typescript/tsconfig.base.json",
   "compilerOptions": {
+    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./apps/web/src/*"],
