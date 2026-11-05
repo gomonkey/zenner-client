@@ -135,14 +135,36 @@ export function Timeblock({
               // Sự kiện chỉ đủ 1 hàng nếu chiều cao khối nhỏ hơn 36px
               const isSingleRow = pos.height < 36;
 
-              // Làm sạch các class border thô của Journal để đổi sang border mảnh mượt ở default mode
-              const cleanColorClass = !isJournal
-                ? (event.color || '').replace(/border-[a-z]+-\d+/g, '').replace(/border-zinc-950/g, '') + ' border border-current/15'
-                : (event.color || 'bg-zinc-100 text-zinc-900');
+              // Chuẩn hóa màu sự kiện theo xu hướng Modern Minimal (tinh tế, không chói gắt, không ngẫu nhiên nhiều màu)
+              const getModernMinimalColor = (rawColor?: string) => {
+                if (!rawColor) {
+                  return 'border-l-primary bg-primary/8 dark:bg-primary/10 text-foreground';
+                }
 
-              const eventCardClass = `${config.timeblockEventCard} ${
-                isJournal ? (event.color || 'bg-zinc-100 text-zinc-900') : cleanColorClass
-              }`;
+                // Nếu đã sử dụng định dạng Modern Minimal với border-l thì dùng trực tiếp
+                if (rawColor.includes('border-l-')) {
+                  return rawColor;
+                }
+
+                // Chuyển đổi màu legacy sang bảng màu Modern Minimal Zen
+                if (rawColor.includes('blue') || rawColor.includes('sky')) {
+                  return 'border-l-sky-500/80 bg-sky-500/8 dark:bg-sky-500/10 text-foreground';
+                }
+                if (rawColor.includes('emerald') || rawColor.includes('green')) {
+                  return 'border-l-primary bg-primary/8 dark:bg-primary/12 text-foreground';
+                }
+                if (rawColor.includes('amber') || rawColor.includes('yellow') || rawColor.includes('orange')) {
+                  return 'border-l-amber-500/80 bg-amber-500/8 dark:bg-amber-500/10 text-foreground';
+                }
+                if (rawColor.includes('purple') || rawColor.includes('pink') || rawColor.includes('rose')) {
+                  return 'border-l-primary/80 bg-primary/8 dark:bg-primary/10 text-foreground';
+                }
+
+                return 'border-l-muted-foreground/60 bg-muted/40 text-foreground';
+              };
+
+              const modernColorClass = getModernMinimalColor(event.color);
+              const eventCardClass = `${config.timeblockEventCard} border-l-[3.5px] ${modernColorClass}`;
 
               // Tính toán định dạng thời gian và khoảng thời lượng
               const parseTime = (t: string) => {
@@ -180,7 +202,7 @@ export function Timeblock({
                 <div
                   key={event.id}
                   className={`${eventCardClass} ${
-                    isSingleRow ? 'px-2 py-0.5 justify-center' : 'p-2 justify-start gap-0.5'
+                    isSingleRow ? 'px-2.5 py-0.5 justify-center' : 'px-2.5 py-1.5 justify-start gap-0.5'
                   }`}
                   style={{
                     top: `${pos.top + 2}px`,
@@ -196,24 +218,24 @@ export function Timeblock({
                   {isSingleRow ? (
                     // Chỉ đủ 1 hàng: bỏ dòng thời gian riêng, ưu tiên label + khoảng thời gian kế bên
                     <div className="flex items-center gap-1.5 w-full min-w-0 leading-none">
-                      <span className="font-semibold text-[11px] truncate">
+                      <span className="font-medium text-[11px] text-foreground truncate">
                         {event.title}
                       </span>
-                      <span className="text-[10px] font-mono opacity-80 shrink-0 font-medium">
+                      <span className="text-[10px] font-mono text-muted-foreground shrink-0">
                         ({durationFormatted})
                       </span>
                     </div>
                   ) : (
                     // Đủ từ 2 hàng trở lên: hiển thị label và thời gian phía dưới
                     <>
-                      <span className="font-semibold text-[11px] md:text-xs truncate leading-snug block">
+                      <span className="font-semibold text-xs text-foreground truncate leading-snug block">
                         {event.title}
                       </span>
-                      <span className="text-[9px] font-mono opacity-80 truncate leading-tight block">
+                      <span className="text-[10px] font-mono text-muted-foreground truncate leading-tight block">
                         {startFormatted} - {endFormatted} ({durationFormatted})
                       </span>
                       {pos.height >= 60 && event.note && (
-                        <span className="text-[9px] opacity-70 truncate block italic">
+                        <span className="text-[10px] text-muted-foreground/75 truncate block italic">
                           {event.note}
                         </span>
                       )}
