@@ -9,10 +9,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", "Plus Jakarta Sans", "Inter", "sans-serif"],
+        sans: ["var(--font-sans)", "Inter", "sans-serif"],
         serif: ["var(--font-serif)", "Newsreader", "Cormorant Garamond", "serif"],
         mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
-        outfit: ["var(--font-sans)", "Public Sans", "sans-serif"]
+        outfit: ["var(--font-sans)", "Inter", "sans-serif"]
       },
       colors: {
         border: "hsl(var(--border))",
