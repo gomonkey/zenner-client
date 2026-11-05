@@ -135,36 +135,31 @@ export function Timeblock({
               // Sự kiện chỉ đủ 1 hàng nếu chiều cao khối nhỏ hơn 36px
               const isSingleRow = pos.height < 36;
 
-              // Chuẩn hóa màu sự kiện theo xu hướng Modern Minimal (tinh tế, không chói gắt, không ngẫu nhiên nhiều màu)
+              // Chuẩn hóa màu sự kiện theo xu hướng Modern Minimal (tinh tế, tự nhiên, không viền sọc dọc kiểu AI)
               const getModernMinimalColor = (rawColor?: string) => {
                 if (!rawColor) {
-                  return 'border-l-primary bg-primary/8 dark:bg-primary/10 text-foreground';
+                  return 'border-border/70 bg-card hover:bg-muted/40 text-foreground';
                 }
 
-                // Nếu đã sử dụng định dạng Modern Minimal với border-l thì dùng trực tiếp
-                if (rawColor.includes('border-l-')) {
-                  return rawColor;
-                }
-
-                // Chuyển đổi màu legacy sang bảng màu Modern Minimal Zen
+                // Nếu có class màu chứa border-l thì loại bỏ hoặc chuyển đổi sang border toàn phần thanh thoát
                 if (rawColor.includes('blue') || rawColor.includes('sky')) {
-                  return 'border-l-sky-500/80 bg-sky-500/8 dark:bg-sky-500/10 text-foreground';
+                  return 'border-sky-500/20 bg-sky-500/5 hover:bg-sky-500/10 dark:bg-sky-500/10 text-foreground';
                 }
-                if (rawColor.includes('emerald') || rawColor.includes('green')) {
-                  return 'border-l-primary bg-primary/8 dark:bg-primary/12 text-foreground';
+                if (rawColor.includes('emerald') || rawColor.includes('green') || rawColor.includes('primary')) {
+                  return 'border-primary/25 bg-primary/5 hover:bg-primary/10 dark:bg-primary/10 text-foreground';
                 }
                 if (rawColor.includes('amber') || rawColor.includes('yellow') || rawColor.includes('orange')) {
-                  return 'border-l-amber-500/80 bg-amber-500/8 dark:bg-amber-500/10 text-foreground';
+                  return 'border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 dark:bg-amber-500/10 text-foreground';
                 }
                 if (rawColor.includes('purple') || rawColor.includes('pink') || rawColor.includes('rose')) {
-                  return 'border-l-primary/80 bg-primary/8 dark:bg-primary/10 text-foreground';
+                  return 'border-primary/20 bg-primary/5 hover:bg-primary/10 dark:bg-primary/10 text-foreground';
                 }
 
-                return 'border-l-muted-foreground/60 bg-muted/40 text-foreground';
+                return 'border-border/70 bg-muted/30 hover:bg-muted/50 text-foreground';
               };
 
               const modernColorClass = getModernMinimalColor(event.color);
-              const eventCardClass = `${config.timeblockEventCard} border-l-[3.5px] ${modernColorClass}`;
+              const eventCardClass = `${config.timeblockEventCard} ${modernColorClass}`;
 
               // Tính toán định dạng thời gian và khoảng thời lượng
               const parseTime = (t: string) => {

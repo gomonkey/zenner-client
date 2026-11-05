@@ -67,11 +67,11 @@ export const initialMockData: MockHomeData = {
     { id: 'rem-5', label: 'Review PR của các thành viên khác', value: 'Y' },
   ],
   events: [
-    { id: 'evt-1', title: 'Daily Standup Meeting', startTime: '09:00', endTime: '09:30', note: 'Sync with frontend team', color: 'border-l-sky-500/80 bg-sky-500/8 dark:bg-sky-500/10 text-foreground' },
-    { id: 'evt-2', title: 'Deep Work: Coding Home Page', startTime: '10:00', endTime: '12:00', note: 'Implement Eisenhower Matrix & Timeblock', color: 'border-l-primary bg-primary/8 dark:bg-primary/12 text-foreground' },
-    { id: 'evt-3', title: 'Lunch & Relax', startTime: '12:00', endTime: '13:00', note: 'Lunch with Elena at cafe', color: 'border-l-amber-500/80 bg-amber-500/8 dark:bg-amber-500/10 text-foreground' },
-    { id: 'evt-4', title: '1-on-1 with Tech Lead', startTime: '14:00', endTime: '14:45', note: 'Discuss PR comments & convention.md', color: 'border-l-muted-foreground/60 bg-muted/40 text-foreground' },
-    { id: 'evt-5', title: 'Design System Review', startTime: '15:30', endTime: '17:00', note: 'Review hand-drawn styles on web/mobile', color: 'border-l-primary/80 bg-primary/8 dark:bg-primary/10 text-foreground' },
+    { id: 'evt-1', title: 'Daily Standup Meeting', startTime: '09:00', endTime: '09:30', note: 'Sync with frontend team', color: 'border-sky-500/20 bg-sky-500/5 hover:bg-sky-500/10 dark:bg-sky-500/10 text-foreground' },
+    { id: 'evt-2', title: 'Deep Work: Coding Home Page', startTime: '10:00', endTime: '12:00', note: 'Implement Eisenhower Matrix & Timeblock', color: 'border-primary/25 bg-primary/5 hover:bg-primary/10 dark:bg-primary/10 text-foreground' },
+    { id: 'evt-3', title: 'Lunch & Relax', startTime: '12:00', endTime: '13:00', note: 'Lunch with Elena at cafe', color: 'border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 dark:bg-amber-500/10 text-foreground' },
+    { id: 'evt-4', title: '1-on-1 with Tech Lead', startTime: '14:00', endTime: '14:45', note: 'Discuss PR comments & convention.md', color: 'border-border/70 bg-muted/30 hover:bg-muted/50 text-foreground' },
+    { id: 'evt-5', title: 'Design System Review', startTime: '15:30', endTime: '17:00', note: 'Review hand-drawn styles on web/mobile', color: 'border-primary/20 bg-primary/5 hover:bg-primary/10 dark:bg-primary/10 text-foreground' },
   ],
   matrix: {
     do: [

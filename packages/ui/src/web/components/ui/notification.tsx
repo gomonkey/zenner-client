@@ -84,7 +84,7 @@ export const NotificationItem = React.forwardRef<HTMLDivElement, NotificationIte
           "group relative flex items-start gap-3 rounded-xl p-3 transition-all duration-200 cursor-pointer font-sans select-none",
           read
             ? "bg-transparent text-muted-foreground hover:bg-muted/40"
-            : "bg-muted/30 text-foreground hover:bg-muted/60 border-l-2 border-primary",
+            : "bg-muted/30 text-foreground hover:bg-muted/60 border border-border/70",
           className
         )}
         {...props}
