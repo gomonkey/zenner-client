@@ -76,7 +76,6 @@ export function Home() {
 								endHour={23}
 								hourHeight={40}
 								title={t('home.todayTimeblock')}
-								dayModeLabel={t('home.dayMode')}
 								themeConfig={themeConfig}
 							/>
 						</div>
