@@ -9,8 +9,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        outfit: ["Public Sans", "sans-serif"]
+        sans: ["var(--font-sans)", "Plus Jakarta Sans", "Inter", "sans-serif"],
+        serif: ["var(--font-serif)", "Newsreader", "Cormorant Garamond", "serif"],
+        mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
+        outfit: ["var(--font-sans)", "Public Sans", "sans-serif"]
       },
       colors: {
         border: "hsl(var(--border))",
@@ -47,10 +49,17 @@ export default {
           foreground: "hsl(var(--card-foreground))"
         }
       },
+      boxShadow: {
+        "zen-sm": "var(--shadow-zen-sm)",
+        "zen-md": "var(--shadow-zen-md)",
+        "zen-lg": "var(--shadow-zen-lg)",
+        "zen-inner": "var(--shadow-zen-inner)"
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)"
+        sm: "calc(var(--radius) - 4px)",
+        zen: "var(--radius)"
       }
     }
   },

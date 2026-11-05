@@ -37,8 +37,8 @@ export function EisenhowerMatrix({
 						<span
 							className={
 								isDone
-									? 'line-through text-zinc-400 dark:text-zinc-550 font-medium'
-									: 'text-zinc-800 dark:text-zinc-200 font-semibold'
+									? 'line-through text-muted-foreground/60 font-normal transition-all'
+									: 'text-foreground font-medium transition-all'
 							}
 						>
 							{info.getValue()}
@@ -94,7 +94,7 @@ export function EisenhowerMatrix({
 			scheduleColumnHelper.accessor('task', {
 				header: () => t('home.taskTodo'),
 				cell: (info) => (
-					<span className="text-zinc-800 dark:text-zinc-200 font-semibold">
+					<span className="text-foreground font-medium">
 						{info.getValue()}
 					</span>
 				),
@@ -102,7 +102,7 @@ export function EisenhowerMatrix({
 			scheduleColumnHelper.accessor('when', {
 				header: () => t('home.when'),
 				cell: (info) => (
-					<span className="text-zinc-500 font-mono text-xs">
+					<span className="text-muted-foreground font-mono text-[11px] bg-muted/60 px-2 py-0.5 rounded-md">
 						{info.getValue()}
 					</span>
 				),
@@ -123,7 +123,7 @@ export function EisenhowerMatrix({
 			delegateColumnHelper.accessor('task', {
 				header: () => t('home.taskDelegate'),
 				cell: (info) => (
-					<span className="text-zinc-800 dark:text-zinc-200 font-semibold">
+					<span className="text-foreground font-medium">
 						{info.getValue()}
 					</span>
 				),
@@ -131,7 +131,7 @@ export function EisenhowerMatrix({
 			delegateColumnHelper.accessor('who', {
 				header: () => t('home.whoCanDoIt'),
 				cell: (info) => (
-					<span className="text-blue-600 dark:text-blue-400 font-bold text-xs bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-900">
+					<span className="text-primary font-medium text-[11px] bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">
 						{info.getValue()}
 					</span>
 				),
@@ -152,7 +152,7 @@ export function EisenhowerMatrix({
 			deleteColumnHelper.accessor('task', {
 				header: () => t('home.taskDelete'),
 				cell: (info) => (
-					<span className="text-zinc-400 dark:text-zinc-550 line-through decoration-rose-500/60 decoration-2 font-medium">
+					<span className="text-muted-foreground/60 line-through decoration-destructive/50 decoration-1">
 						{info.getValue()}
 					</span>
 				),
@@ -167,120 +167,116 @@ export function EisenhowerMatrix({
 		getCoreRowModel: getCoreRowModel(),
 	});
 
-	// Reusable mini-table renderer
-	const renderTable = (
+	// Reusable quadrant mini-table renderer
+	const renderQuadrant = (
 		table: ReturnType<
 			typeof useReactTable<DoTask | ScheduleTask | DelegateTask | DeleteTask>
 		>,
+		title: string,
+		tagColor: string,
+		itemCount: number,
 	) => (
-		<div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-			<table className="w-full text-left border-collapse text-[11px]">
-				<thead>
-					{table.getHeaderGroups().map((headerGroup) => (
-						<tr key={headerGroup.id}>
-							{headerGroup.headers.map((header) => (
-								<th key={header.id} className={themeConfig.matrixTableHeader}>
-									{flexRender(
-										header.column.columnDef.header,
-										header.getContext(),
-									)}
-								</th>
-							))}
-						</tr>
-					))}
-				</thead>
-				<tbody>
-					{table.getRowModel().rows.map((row) => (
-						<tr key={row.id} className={themeConfig.matrixRowHover}>
-							{row.getVisibleCells().map((cell) => (
-								<td
-									key={cell.id}
-									className="py-1 px-1 border-b border-zinc-100 dark:border-zinc-800/50"
-								>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</td>
-							))}
-						</tr>
-					))}
-				</tbody>
-			</table>
+		<div className="flex-1 flex flex-col h-full min-h-0 overflow-hidden select-none">
+			{/* Quadrant Sub-header */}
+			<div className="flex items-center justify-between pb-1.5 mb-1 border-b border-border/50 flex-shrink-0">
+				<div className="flex items-center gap-1.5">
+					<span className={`w-2 h-2 rounded-full ${tagColor}`} />
+					<span className="text-[11px] font-bold tracking-wider uppercase text-foreground">
+						{title}
+					</span>
+				</div>
+				<span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-muted/70 text-muted-foreground font-semibold">
+					{itemCount}
+				</span>
+			</div>
+
+			{/* Task Table */}
+			<div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+				<table className="w-full text-left border-collapse text-xs">
+					<thead>
+						{table.getHeaderGroups().map((headerGroup) => (
+							<tr key={headerGroup.id}>
+								{headerGroup.headers.map((header) => (
+									<th key={header.id} className={themeConfig.matrixTableHeader}>
+										{flexRender(
+											header.column.columnDef.header,
+											header.getContext(),
+										)}
+									</th>
+								))}
+							</tr>
+						))}
+					</thead>
+					<tbody>
+						{table.getRowModel().rows.map((row) => (
+							<tr key={row.id} className={themeConfig.matrixRowHover}>
+								{row.getVisibleCells().map((cell) => (
+									<td
+										key={cell.id}
+										className="py-1.5 px-1 border-b border-border/30"
+									>
+										{flexRender(cell.column.columnDef.cell, cell.getContext())}
+									</td>
+								))}
+							</tr>
+						))}
+					</tbody>
+				</table>
+
+				{/* Planner Dotted Lines: lấp đầy khoảng trống tự nhiên theo phong cách sổ tay Zen */}
+				<div className="flex flex-col py-1 pointer-events-none opacity-40 dark:opacity-20">
+					<div className="py-2.5 border-b border-dashed border-border" />
+					<div className="py-2.5 border-b border-dashed border-border" />
+					<div className="py-2.5 border-b border-dashed border-border" />
+				</div>
+			</div>
 		</div>
 	);
 
 	return (
-		<div className="flex-1 min-h-0 flex flex-col gap-2 overflow-hidden">
-			<span className="text-xs font-black uppercase tracking-wider text-zinc-800 dark:text-zinc-300 flex-shrink-0">
-				{t('home.eisenhowerTitle')}
-			</span>
-
-			{/* Wrapper: label dọc bên trái + lưới chính bên phải */}
-			<div className="flex-1 min-h-0 flex overflow-hidden">
-				{/* Cột nhãn dọc "Quan trọng" / "Không quan trọng" */}
-				<div className="hidden sm:flex flex-col w-7 flex-shrink-0 mr-1">
-					{/* Ô trống góc trên cùng (tương ứng header row) */}
-					<div className="h-7 flex-shrink-0" />
-					{/* Nhãn QUAN TRỌNG */}
-					<div className="flex-1 flex items-center justify-center">
-						<span className={themeConfig.matrixImportantRow}>
-							{t('home.important')}
-						</span>
-					</div>
-					{/* Nhãn KHÔNG QUAN TRỌNG */}
-					<div className="flex-1 flex items-center justify-center">
-						<span className={themeConfig.matrixUnimportantRow}>
-							{t('home.unimportant')}
-						</span>
-					</div>
+		<div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+			{/* Lưới 2x2 tối giản */}
+			<div className={themeConfig.matrixContainer}>
+				{/* Ô 1: DO (trái trên) */}
+				<div className={`${themeConfig.matrixCell} matrix-cell-left`}>
+					{renderQuadrant(
+						doTable as never,
+						t('home.taskDo') || 'Làm ngay (Do)',
+						'bg-primary',
+						matrix.do.length,
+					)}
 				</div>
 
-				{/* Lưới chính 2x2 + header row */}
-				<div className="flex-1 min-w-0 flex flex-col overflow-hidden">
-					{/* Header row: 2 cột tiêu đề */}
-					<div className="hidden sm:grid grid-cols-2 gap-px flex-shrink-0 mb-px">
-						<div className={themeConfig.matrixUrgentHeader}>
-							{t('home.urgent')}
-						</div>
-						<div className={themeConfig.matrixNotUrgentHeader}>
-							{t('home.notUrgent')}
-						</div>
-					</div>
+				{/* Ô 2: SCHEDULE (phải trên) */}
+				<div className={themeConfig.matrixCell}>
+					{renderQuadrant(
+						scheduleTable as never,
+						t('home.taskTodo') || 'Lên lịch (Schedule)',
+						'bg-amber-500',
+						matrix.schedule.length,
+					)}
+				</div>
 
-					{/* Lưới 2x2 với border chung tạo thành đường kẻ */}
-					<div className={themeConfig.matrixContainer}>
-						{/* Ô 1: DO — Khẩn cấp & Quan trọng (trái trên) */}
-						<div className={`${themeConfig.matrixCell} matrix-cell-left`}>
-							<div className="sm:hidden text-[10px] font-black text-rose-600 uppercase mb-1">
-								{t('home.urgent')} · {t('home.important')}
-							</div>
-							{renderTable(doTable as never)}
-						</div>
+				{/* Ô 3: DELEGATE (trái dưới) */}
+				<div
+					className={`${themeConfig.matrixCell} matrix-cell-left matrix-cell-divider`}
+				>
+					{renderQuadrant(
+						delegateTable as never,
+						t('home.taskDelegate') || 'Ủy quyền (Delegate)',
+						'bg-sky-500',
+						matrix.delegate.length,
+					)}
+				</div>
 
-						{/* Ô 2: SCHEDULE — Không khẩn cấp & Quan trọng (phải trên) */}
-						<div className={themeConfig.matrixCell}>
-							<div className="sm:hidden text-[10px] font-black text-amber-600 uppercase mb-1">
-								{t('home.notUrgent')} · {t('home.important')}
-							</div>
-							{renderTable(scheduleTable as never)}
-						</div>
-
-						{/* Ô 3: DELEGATE — Khẩn cấp & Không quan trọng (trái dưới) */}
-						<div
-							className={`${themeConfig.matrixCell} matrix-cell-left matrix-cell-divider`}
-						>
-							<div className="sm:hidden text-[10px] font-black text-rose-600 uppercase mb-1">
-								{t('home.urgent')} · {t('home.unimportant')}
-							</div>
-							{renderTable(delegateTable as never)}
-						</div>
-
-						{/* Ô 4: DELETE — Không khẩn cấp & Không quan trọng (phải dưới) */}
-						<div className={`${themeConfig.matrixCell} matrix-cell-divider`}>
-							<div className="sm:hidden text-[10px] font-black text-zinc-500 uppercase mb-1">
-								{t('home.notUrgent')} · {t('home.unimportant')}
-							</div>
-							{renderTable(deleteTable as never)}
-						</div>
-					</div>
+				{/* Ô 4: DELETE (phải dưới) */}
+				<div className={`${themeConfig.matrixCell} matrix-cell-divider`}>
+					{renderQuadrant(
+						deleteTable as never,
+						t('home.taskDelete') || 'Loại bỏ (Delete)',
+						'bg-destructive',
+						matrix.delete.length,
+					)}
 				</div>
 			</div>
 		</div>
