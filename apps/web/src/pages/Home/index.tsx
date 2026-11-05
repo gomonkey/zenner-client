@@ -48,7 +48,7 @@ export function Home() {
 									<span className="font-extrabold text-sm text-zinc-900 dark:text-zinc-100 select-none">
 										{t('home.date')}:
 									</span>
-									<span className="font-bold text-zinc-750 dark:text-zinc-300 border-b-2 border-dashed border-zinc-450 dark:border-zinc-700 pb-0.5 leading-none pr-8 select-none">
+									<span className="font-bold text-zinc-750 dark:text-zinc-300 pb-0.5 leading-none pr-8 select-none">
 										{pageData.date}
 									</span>
 								</div>
