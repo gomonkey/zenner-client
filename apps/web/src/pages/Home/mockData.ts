@@ -67,11 +67,11 @@ export const initialMockData: MockHomeData = {
     { id: 'rem-5', label: 'Review PR của các thành viên khác', value: 'Y' },
   ],
   events: [
-    { id: 'evt-1', title: 'Daily Standup Meeting', startTime: '09:00', endTime: '09:30', note: 'Sync with frontend team', color: 'bg-blue-100 dark:bg-blue-950 border-blue-400 dark:border-blue-700 text-blue-700 dark:text-blue-300' },
-    { id: 'evt-2', title: 'Deep Work: Coding Home Page', startTime: '10:00', endTime: '12:00', note: 'Implement Eisenhower Matrix & Timeblock', color: 'bg-emerald-100 dark:bg-emerald-950 border-emerald-400 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300' },
-    { id: 'evt-3', title: 'Lunch & Relax', startTime: '12:00', endTime: '13:00', note: 'Lunch with Elena at cafe', color: 'bg-amber-100 dark:bg-amber-950 border-amber-400 dark:border-amber-700 text-amber-700 dark:text-amber-300' },
-    { id: 'evt-4', title: '1-on-1 with Tech Lead', startTime: '14:00', endTime: '14:45', note: 'Discuss PR comments & convention.md', color: 'bg-purple-100 dark:bg-purple-950 border-purple-400 dark:border-purple-700 text-purple-700 dark:text-purple-300' },
-    { id: 'evt-5', title: 'Design System Review', startTime: '15:30', endTime: '17:00', note: 'Review hand-drawn styles on web/mobile', color: 'bg-pink-100 dark:bg-pink-950 border-pink-400 dark:border-pink-700 text-pink-700 dark:text-pink-300' },
+    { id: 'evt-1', title: 'Daily Standup Meeting', startTime: '09:00', endTime: '09:30', note: 'Sync with frontend team', color: 'sky' },
+    { id: 'evt-2', title: 'Deep Work: Coding Home Page', startTime: '10:00', endTime: '12:00', note: 'Implement Eisenhower Matrix & Timeblock', color: 'primary' },
+    { id: 'evt-3', title: 'Lunch & Relax', startTime: '12:00', endTime: '13:00', note: 'Lunch with Elena at cafe', color: 'amber' },
+    { id: 'evt-4', title: '1-on-1 with Tech Lead', startTime: '14:00', endTime: '14:45', note: 'Discuss PR comments & convention.md', color: 'purple' },
+    { id: 'evt-5', title: 'Design System Review', startTime: '15:30', endTime: '17:00', note: 'Review hand-drawn styles on web/mobile', color: 'emerald' },
   ],
   matrix: {
     do: [

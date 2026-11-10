@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 import { calculateEventPositions, RawEvent } from '@zenner/core/util/calendar-layout';
+import { TimeblockThemeConfig } from '@zenner/core/theme/themeConfig';
 
 export interface TimeblockEvent extends RawEvent {
   id: string;
@@ -8,16 +9,14 @@ export interface TimeblockEvent extends RawEvent {
   color?: string; // Lớp CSS Tailwind cho nền, viền và màu chữ
 }
 
-import { TimeblockThemeConfig } from '@zenner/core/theme/themeConfig';
-
 const defaultTimeblockTheme: TimeblockThemeConfig = {
   id: 'default',
   timeblockContainer: "flex flex-col h-full bg-card text-card-foreground rounded-2xl border border-border shadow-sm overflow-hidden select-none",
   timeblockHeader: "px-4 py-2.5 border-b border-border bg-muted/40 flex justify-between items-center",
-  timeblockModeLabel: "text-[9px] font-bold px-2 py-0.5 rounded bg-secondary text-secondary-foreground",
-  timeblockTimeAxis: "w-16 border-r border-border bg-muted/20 flex flex-col",
+  timeblockModeLabel: "text-[9px] font-bold px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground uppercase tracking-wider",
+  timeblockTimeAxis: "w-16 border-r border-border/80 bg-muted/20 flex flex-col",
   timeblockGridLine: "absolute left-0 right-0 border-b border-border/40",
-  timeblockEventCard: "absolute rounded-lg overflow-hidden flex flex-col transition-all hover:opacity-90 active:scale-[0.99] cursor-pointer shadow-sm"
+  timeblockEventCard: "absolute rounded-lg overflow-hidden flex flex-col transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xs"
 };
 
 interface TimeblockProps {
@@ -36,7 +35,7 @@ export function Timeblock({
   endHour = 23,
   hourHeight = 40,
   title = "Today's Timeblock",
-  dayModeLabel = "DAY MODE",
+  dayModeLabel,
   themeConfig
 }: TimeblockProps) {
   const config = themeConfig || defaultTimeblockTheme;
@@ -82,15 +81,17 @@ export function Timeblock({
   }, [now, startHour, endHour, hourHeight]);
 
   return (
-    <div className={config.timeblockContainer}>
-      {/* Header Lịch */}
+    <div className={`${config.timeblockContainer} font-sans`}>
+      {/* Header Lịch (Đã bỏ nhãn chế độ ngày) */}
       <div className={config.timeblockHeader}>
-        <span className="font-outfit font-extrabold text-zinc-900 dark:text-zinc-100 text-sm tracking-wider uppercase">
+        <span className="font-sans font-bold text-foreground text-sm tracking-wider uppercase select-none">
           {title}
         </span>
-        <span className={config.timeblockModeLabel}>
-          {dayModeLabel}
-        </span>
+        {dayModeLabel && (
+          <span className={config.timeblockModeLabel}>
+            {dayModeLabel}
+          </span>
+        )}
       </div>
 
       {/* Grid chứa lịch trình */}
@@ -102,7 +103,7 @@ export function Timeblock({
             {hours.map((hour) => (
               <div
                 key={hour}
-                className="text-right pr-3 text-[11px] font-bold text-zinc-500 dark:text-zinc-400 font-mono relative"
+                className="text-right pr-3 text-[11px] font-semibold text-muted-foreground/80 font-sans relative select-none tracking-tight"
                 style={{
                   height: `${hourHeight}px`,
                   lineHeight: '22px', // Căn chỉnh văn bản lên đầu mốc giờ
@@ -114,7 +115,7 @@ export function Timeblock({
           </div>
 
           {/* Lưới thời gian và Sự kiện (Grid Content) */}
-          <div className="flex-1 relative bg-zinc-50/20 dark:bg-zinc-900/5">
+          <div className="flex-1 relative bg-muted/5">
             {/* Vẽ đường kẻ ngang phân cách mỗi giờ */}
             {hours.map((_, idx) => (
               <div
@@ -131,73 +132,128 @@ export function Timeblock({
               const pos = positionedEvents[idx];
               if (!pos) return null;
 
-              // Sự kiện được coi là quá ngắn nếu chiều cao tính toán nhỏ hơn 32px
-              const isShort = pos.height < 32;
+              // Sự kiện xếp trên 1 hàng ngang nếu chiều cao từ 1 giờ (48px) trở xuống để không bị tràn chữ
+              const isSingleRow = pos.height <= 48;
 
-              // Làm sạch các class border thô của Journal để đổi sang border mảnh mượt ở default mode
-              const cleanColorClass = !isJournal
-                ? (event.color || '').replace(/border-[a-z]+-\d+/g, '').replace(/border-zinc-950/g, '') + ' border border-current/15'
-                : (event.color || 'bg-zinc-100 text-zinc-900');
+              // Màu nền sự kiện theo kiểu Bold sắc nét (solid background, chữ tương phản cao, không phụ thuộc viền)
+              const getModernMinimalColor = (rawColor?: string) => {
+                if (!rawColor) {
+                  return 'bg-zinc-700 hover:bg-zinc-600 text-white shadow-xs';
+                }
 
-              const eventCardClass = `${config.timeblockEventCard} ${
-                isJournal ? (event.color || 'bg-zinc-100 text-zinc-900') : cleanColorClass
-              }`;
+                const c = rawColor.toLowerCase();
+
+                if (c.includes('sky') || c.includes('blue') || c.includes('cyan')) {
+                  return 'bg-sky-500 hover:bg-sky-600 text-white shadow-xs';
+                }
+                if (c.includes('emerald') || c.includes('green') || c.includes('teal')) {
+                  return 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs';
+                }
+                if (c.includes('amber') || c.includes('yellow') || c.includes('orange')) {
+                  return 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs';
+                }
+                if (c.includes('purple') || c.includes('violet') || c.includes('indigo')) {
+                  return 'bg-violet-600 hover:bg-violet-700 text-white shadow-xs';
+                }
+                if (c.includes('rose') || c.includes('pink') || c.includes('red')) {
+                  return 'bg-rose-500 hover:bg-rose-600 text-white shadow-xs';
+                }
+                if (c.includes('primary')) {
+                  return 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs';
+                }
+
+                return 'bg-zinc-700 hover:bg-zinc-600 text-white shadow-xs';
+              };
+
+              const modernColorClass = getModernMinimalColor(event.color);
+              const eventCardClass = `${config.timeblockEventCard} ${modernColorClass}`;
+
+              // Tính toán định dạng thời gian và khoảng thời lượng
+              const parseTime = (t: string) => {
+                const [hStr, mStr] = t.split(':');
+                const h = parseInt(hStr, 10);
+                const m = parseInt(mStr, 10);
+                return { h, m, totalMinutes: h * 60 + m };
+              };
+
+              const tStart = parseTime(event.startTime);
+              const tEnd = parseTime(event.endTime);
+
+              const formatPart = (t: { h: number; m: number }) => {
+                if (t.m === 0) return `${t.h}:00`;
+                return `${t.h}:${t.m < 10 ? '0' + t.m : t.m}`;
+              };
+
+              const startFormatted = formatPart(tStart);
+              const endFormatted = formatPart(tEnd);
+
+              const diffMin = tEnd.totalMinutes - tStart.totalMinutes;
+              const diffH = Math.floor(diffMin / 60);
+              const diffM = diffMin % 60;
+
+              let durationFormatted = '';
+              if (diffH > 0 && diffM > 0) {
+                durationFormatted = `${diffH}h${diffM}m`;
+              } else if (diffH > 0) {
+                durationFormatted = `${diffH}h`;
+              } else {
+                durationFormatted = `${diffM}m`;
+              }
 
               return (
                 <div
                   key={event.id}
-                  className={`${eventCardClass} ${isShort ? 'p-1 justify-center' : 'p-2 justify-start'}`}
+                  className={`${eventCardClass} ${
+                    isSingleRow ? 'px-3 py-1 justify-center' : 'px-3 py-1.5 justify-start gap-1'
+                  }`}
                   style={{
                     top: `${pos.top + 2}px`,
-                    height: `${Math.max(22, pos.height - 4)}px`, // Ép chiều cao tối thiểu 22px để luôn thấy title
+                    height: `${Math.max(22, pos.height - 4)}px`,
                     left: `${isJournal ? pos.left : pos.left + 0.5}%`,
                     width: `calc(${isJournal ? pos.width : pos.width - 1}% - 6px)`,
                     marginRight: '3px',
                     marginLeft: '3px',
-                    zIndex: isShort ? 10 : 1, // Đưa sự kiện siêu ngắn lên trên để không bị che
+                    zIndex: isSingleRow ? 10 : 1,
                   }}
+                  title={`${event.title} (${startFormatted} - ${endFormatted})`}
                 >
-                  <span className="font-extrabold text-[10px] md:text-xs truncate leading-none block">
-                    {event.title}
-                  </span>
-                  {!isShort && (
-                    <span className="text-[8px] font-mono font-bold opacity-80 mt-0.5 truncate leading-tight block">
-                      {(() => {
-                        const parseTime = (t: string) => {
-                          const [hStr, mStr] = t.split(':');
-                          const h = parseInt(hStr, 10);
-                          const m = parseInt(mStr, 10);
-                          return { h, m, totalMinutes: h * 60 + m };
-                        };
-                        
-                        const tStart = parseTime(event.startTime);
-                        const tEnd = parseTime(event.endTime);
-                        
-                        const formatPart = (t: { h: number; m: number }) => {
-                          if (t.m === 0) return `${t.h}h`;
-                          return `${t.h}h${t.m < 10 ? '0' + t.m : t.m}`;
-                        };
-                        
-                        const startFormatted = formatPart(tStart);
-                        const endFormatted = formatPart(tEnd);
-                        
-                        const diffMin = tEnd.totalMinutes - tStart.totalMinutes;
-                        const diffH = Math.floor(diffMin / 60);
-                        const diffM = diffMin % 60;
-                        
-                        let durationFormatted = '';
-                        if (diffH > 0 && diffM > 0) {
-                          durationFormatted = `${diffH}h${diffM}`;
-                        } else if (diffH > 0) {
-                          durationFormatted = `${diffH}h`;
-                        } else {
-                          durationFormatted = `${diffM}m`;
-                        }
-                        
-                        // Bỏ ngoặc vuông ở label thời gian
-                        return `${startFormatted}-${endFormatted} (${durationFormatted})`;
-                      })()}
-                    </span>
+                  {isSingleRow ? (
+                    // Xếp ngang trên 1 hàng: Tiêu đề + Khung giờ (12:00 - 13:00) + Badge thời lượng (1h)
+                    <div className="flex items-center justify-between gap-2 w-full min-w-0 h-full font-sans">
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                        <span className="font-bold text-xs truncate">
+                          {event.title}
+                        </span>
+                        {pos.height >= 30 && (
+                          <span className="text-[10px] font-sans font-medium opacity-85 shrink-0">
+                            {startFormatted} – {endFormatted}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[9.5px] font-sans font-bold px-1.5 py-0.5 rounded bg-black/20 text-current shrink-0 leading-none">
+                        {durationFormatted}
+                      </span>
+                    </div>
+                  ) : (
+                    // Đủ từ 2 hàng trở lên (> 48px): Hiển thị nhiều tầng thông tin thoải mái
+                    <div className="flex flex-col gap-1 w-full min-w-0 font-sans">
+                      <div className="flex items-start justify-between gap-1 w-full min-w-0">
+                        <span className="font-bold text-xs tracking-tight leading-snug truncate">
+                          {event.title}
+                        </span>
+                        <span className="text-[9.5px] font-sans font-bold px-1.5 py-0.5 rounded bg-black/20 text-current shrink-0 leading-none">
+                          {durationFormatted}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[10px] font-sans font-medium opacity-85 leading-tight">
+                        <span>{startFormatted} – {endFormatted}</span>
+                      </div>
+                      {pos.height >= 60 && event.note && (
+                        <p className="text-[10px] font-medium opacity-75 truncate leading-tight mt-0.5">
+                          {event.note}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
               );
@@ -209,8 +265,8 @@ export function Timeblock({
                 className="absolute left-0 right-0 flex items-center z-20 pointer-events-none"
                 style={{ top: `${currentTimePosition}px` }}
               >
-                <div className="w-2 h-2 rounded-full bg-rose-500 -ml-1 flex-shrink-0" />
-                <div className="flex-1 h-[1.5px] bg-rose-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)] -ml-1 flex-shrink-0 ring-2 ring-background" />
+                <div className="flex-1 h-[2px] bg-rose-500/90 shadow-xs" />
               </div>
             )}
 

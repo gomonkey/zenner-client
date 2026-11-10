@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   initialMockData, 
   MockHomeData 
@@ -7,7 +7,8 @@ import {
 export function useHomeData() {
   // Khởi tạo state với mock data
   const [pageData, setPageData] = useState<MockHomeData>(initialMockData);
-  
+  const [, setThemesTick] = useState(0);
+
   // Boost theme: Đọc trạng thái từ localStorage, mặc định là 'default'
   const [themeBoost, setThemeBoost] = useState<string>(() => {
     if (typeof window !== 'undefined') {
@@ -16,6 +17,22 @@ export function useHomeData() {
     }
     return 'default';
   });
+
+  // Lắng nghe sự kiện cập nhật/xóa custom theme
+  useEffect(() => {
+    const handleThemeUpdate = (e: Event) => {
+      setThemesTick((t) => t + 1);
+      const detail = (e as CustomEvent).detail;
+      if (detail && detail.deleted && detail.id === themeBoost) {
+        toggleThemeBoost('default');
+      }
+    };
+
+    window.addEventListener('zenner:theme-updated', handleThemeUpdate);
+    return () => {
+      window.removeEventListener('zenner:theme-updated', handleThemeUpdate);
+    };
+  }, [themeBoost]);
 
   const toggleThemeBoost = (theme: string) => {
     setThemeBoost(theme);

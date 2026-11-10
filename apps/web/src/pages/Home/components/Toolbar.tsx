@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Button } from '@zenner/ui';
-import { ThemeConfig, getThemeList } from '@zenner/core/theme/themeConfig';
+import { useState, useEffect } from 'react';
+import { Button, Plus, Trash2 } from '@zenner/ui';
+import { ThemeConfig, getThemeList, deleteCustomTheme } from '@zenner/core/theme/themeConfig';
+import { CustomThemeModal } from './CustomThemeModal';
 
 // SVG Icons cho Toolbar
 function SunIcon() {
@@ -68,86 +69,168 @@ export function Toolbar({
   themeConfig
 }: ToolbarProps) {
   const [isOpenSettings, setIsOpenSettings] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [themes, setThemes] = useState<ThemeConfig[]>(() => getThemeList());
 
-  // Lấy danh sách theme động từ localStorage
-  const availableThemes = getThemeList();
+  // Lắng nghe sự kiện cập nhật theme để refresh danh sách
+  useEffect(() => {
+    const handleThemeUpdate = () => {
+      setThemes(getThemeList());
+    };
+
+    window.addEventListener('zenner:theme-updated', handleThemeUpdate);
+    return () => {
+      window.removeEventListener('zenner:theme-updated', handleThemeUpdate);
+    };
+  }, []);
+
+  const handleDeleteTheme = (e: React.MouseEvent, themeId: string) => {
+    e.stopPropagation();
+    if (window.confirm('Bạn có chắc chắn muốn xóa theme tùy biến này?')) {
+      deleteCustomTheme(themeId);
+      if (themeBoost === themeId) {
+        toggleThemeBoost('default');
+      }
+      setThemes(getThemeList());
+    }
+  };
 
   return (
-    <div className={themeConfig.toolbar}>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={toggleLanguage}
-        className={themeConfig.toolbarButton}
-      >
-        {currentLanguage === 'vi' ? 'EN' : 'VI'}
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={toggleTheme}
-        className={themeConfig.toolbarButton}
-      >
-        {resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
-      </Button>
-      
-      {/* Nút Setting có Dropdown */}
-      <div className="relative">
+    <>
+      <div className={themeConfig.toolbar}>
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => setIsOpenSettings(!isOpenSettings)}
-          className={`${themeConfig.toolbarButton} ${isOpenSettings && themeConfig.toolbarButtonActive ? themeConfig.toolbarButtonActive : ''}`}
-          aria-label="Settings"
+          onClick={toggleLanguage}
+          className={themeConfig.toolbarButton}
         >
-          <SettingsIcon />
+          {currentLanguage === 'vi' ? 'EN' : 'VI'}
         </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={toggleTheme}
+          className={themeConfig.toolbarButton}
+        >
+          {resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
+        </Button>
+        
+        {/* Nút Setting có Dropdown */}
+        <div className="relative">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsOpenSettings(!isOpenSettings)}
+            className={`${themeConfig.toolbarButton} ${isOpenSettings && themeConfig.toolbarButtonActive ? themeConfig.toolbarButtonActive : ''}`}
+            aria-label="Settings"
+          >
+            <SettingsIcon />
+          </Button>
 
-        {isOpenSettings && (
-          <>
-            {/* Overlay vô hình để click ra ngoài đóng menu */}
-            <div className="fixed inset-0 z-40" onClick={() => setIsOpenSettings(false)} />
-            
-            {/* Dropdown Menu Box */}
-            <div className={themeConfig.dropdownMenu}>
-              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-550 px-2 py-1 block select-none">
-                Boost Theme
-              </span>
+          {isOpenSettings && (
+            <>
+              {/* Overlay vô hình để click ra ngoài đóng menu */}
+              <div className="fixed inset-0 z-40" onClick={() => setIsOpenSettings(false)} />
               
-              {/* Render danh sách theme động */}
-              {availableThemes.map((themeItem) => {
-                const isActive = themeBoost === themeItem.id;
-                
-                return (
+              {/* Dropdown Menu Box */}
+              <div className={themeConfig.dropdownMenu}>
+                {/* Header với nút Thêm Theme (+) */}
+                <div className="flex items-center justify-between px-2 py-1 select-none border-b border-border/50 pb-1.5 mb-0.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    Boost Theme
+                  </span>
                   <button
-                    key={themeItem.id}
-                    onClick={() => {
-                      toggleThemeBoost(themeItem.id);
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsModalOpen(true);
                       setIsOpenSettings(false);
                     }}
-                    className={isActive ? themeConfig.dropdownItemActive : themeConfig.dropdownItemInactive}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:text-primary/80 transition-colors p-1 rounded-lg hover:bg-muted"
+                    title="Thêm Theme mới bằng file JSON"
                   >
-                    <span>{themeItem.name}</span>
-                    {isActive && <CheckIcon />}
+                    <Plus className="size-3.5" />
+                    <span>Thêm theme</span>
                   </button>
-                );
-              })}
-            </div>
-          </>
-        )}
+                </div>
+                
+                {/* Render danh sách theme động */}
+                <div className="flex flex-col gap-0.5 max-h-48 overflow-y-auto">
+                  {themes.map((themeItem) => {
+                    const isActive = themeBoost === themeItem.id;
+                    const isCustom = themeItem.id !== 'default';
+                    
+                    return (
+                      <div
+                        key={themeItem.id}
+                        className="group flex items-center justify-between rounded-xl hover:bg-muted/60 transition-colors"
+                      >
+                        <button
+                          onClick={() => {
+                            toggleThemeBoost(themeItem.id);
+                            setIsOpenSettings(false);
+                          }}
+                          className={`${isActive ? themeConfig.dropdownItemActive : themeConfig.dropdownItemInactive} flex-1`}
+                        >
+                          <span className="truncate pr-1">{themeItem.name}</span>
+                          {isActive && <CheckIcon />}
+                        </button>
+
+                        {/* Nút xóa dành cho custom themes */}
+                        {isCustom && (
+                          <button
+                            type="button"
+                            onClick={(e) => handleDeleteTheme(e, themeItem.id)}
+                            className="p-1.5 mr-1 text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                            title="Xóa theme này"
+                          >
+                            <Trash2 className="size-3" />
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Nút dấu cộng nổi bật dưới đáy menu */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setIsOpenSettings(false);
+                  }}
+                  className="mt-1 flex items-center justify-center gap-1.5 w-full py-1.5 px-2 rounded-xl text-[11px] font-medium text-primary hover:bg-primary/10 border border-dashed border-primary/30 transition-colors"
+                >
+                  <Plus className="size-3.5" />
+                  <span>Tạo Theme từ JSON...</span>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="w-[1.5px] h-4 bg-zinc-300 dark:bg-zinc-700 self-center mx-0.5" />
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={logout}
+          className={themeConfig.toolbarLogout}
+          aria-label={logoutLabel}
+        >
+          <LogOutIcon />
+        </Button>
       </div>
 
-      <div className="w-[1.5px] h-4 bg-zinc-300 dark:bg-zinc-700 self-center mx-0.5" />
-      
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={logout}
-        className={themeConfig.toolbarLogout}
-        aria-label={logoutLabel}
-      >
-        <LogOutIcon />
-      </Button>
-    </div>
+      {/* Modal Tạo/Nhập Theme Custom bằng file JSON */}
+      <CustomThemeModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onThemeSaved={(newThemeId) => {
+          toggleThemeBoost(newThemeId);
+          setThemes(getThemeList());
+        }}
+      />
+    </>
   );
 }
