@@ -13,10 +13,10 @@ const defaultTimeblockTheme: TimeblockThemeConfig = {
   id: 'default',
   timeblockContainer: "flex flex-col h-full bg-card text-card-foreground rounded-2xl border border-border shadow-sm overflow-hidden select-none",
   timeblockHeader: "px-4 py-2.5 border-b border-border bg-muted/40 flex justify-between items-center",
-  timeblockModeLabel: "text-[9px] font-bold px-2 py-0.5 rounded bg-secondary text-secondary-foreground",
-  timeblockTimeAxis: "w-16 border-r border-border bg-muted/20 flex flex-col",
+  timeblockModeLabel: "text-[9px] font-bold px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground uppercase tracking-wider",
+  timeblockTimeAxis: "w-16 border-r border-border/80 bg-muted/20 flex flex-col",
   timeblockGridLine: "absolute left-0 right-0 border-b border-border/40",
-  timeblockEventCard: "absolute rounded-lg overflow-hidden flex flex-col transition-all hover:opacity-90 active:scale-[0.99] cursor-pointer shadow-sm"
+  timeblockEventCard: "absolute rounded-lg overflow-hidden flex flex-col transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xs"
 };
 
 interface TimeblockProps {
@@ -81,7 +81,7 @@ export function Timeblock({
   }, [now, startHour, endHour, hourHeight]);
 
   return (
-    <div className={config.timeblockContainer}>
+    <div className={`${config.timeblockContainer} font-sans`}>
       {/* Header Lịch (Đã bỏ nhãn chế độ ngày) */}
       <div className={config.timeblockHeader}>
         <span className="font-sans font-bold text-foreground text-sm tracking-wider uppercase select-none">
@@ -103,7 +103,7 @@ export function Timeblock({
             {hours.map((hour) => (
               <div
                 key={hour}
-                className="text-right pr-3 text-[11px] font-medium text-muted-foreground font-mono relative select-none"
+                className="text-right pr-3 text-[11px] font-semibold text-muted-foreground/80 font-sans relative select-none tracking-tight"
                 style={{
                   height: `${hourHeight}px`,
                   lineHeight: '22px', // Căn chỉnh văn bản lên đầu mốc giờ
@@ -132,30 +132,37 @@ export function Timeblock({
               const pos = positionedEvents[idx];
               if (!pos) return null;
 
-              // Sự kiện chỉ đủ 1 hàng nếu chiều cao khối nhỏ hơn 36px
-              const isSingleRow = pos.height < 36;
+              // Sự kiện xếp trên 1 hàng ngang nếu chiều cao từ 1 giờ (48px) trở xuống để không bị tràn chữ
+              const isSingleRow = pos.height <= 48;
 
-              // Chuẩn hóa màu sự kiện theo xu hướng Modern Minimal (tinh tế, tự nhiên, không viền sọc dọc kiểu AI)
+              // Màu nền sự kiện theo kiểu Bold sắc nét (solid background, chữ tương phản cao, không phụ thuộc viền)
               const getModernMinimalColor = (rawColor?: string) => {
                 if (!rawColor) {
-                  return 'border-border/70 bg-card hover:bg-muted/40 text-foreground';
+                  return 'bg-zinc-700 hover:bg-zinc-600 text-white shadow-xs';
                 }
 
-                // Nếu có class màu chứa border-l thì loại bỏ hoặc chuyển đổi sang border toàn phần thanh thoát
-                if (rawColor.includes('blue') || rawColor.includes('sky')) {
-                  return 'border-sky-500/20 bg-sky-500/5 hover:bg-sky-500/10 dark:bg-sky-500/10 text-foreground';
+                const c = rawColor.toLowerCase();
+
+                if (c.includes('sky') || c.includes('blue') || c.includes('cyan')) {
+                  return 'bg-sky-500 hover:bg-sky-600 text-white shadow-xs';
                 }
-                if (rawColor.includes('emerald') || rawColor.includes('green') || rawColor.includes('primary')) {
-                  return 'border-primary/25 bg-primary/5 hover:bg-primary/10 dark:bg-primary/10 text-foreground';
+                if (c.includes('emerald') || c.includes('green') || c.includes('teal')) {
+                  return 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs';
                 }
-                if (rawColor.includes('amber') || rawColor.includes('yellow') || rawColor.includes('orange')) {
-                  return 'border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 dark:bg-amber-500/10 text-foreground';
+                if (c.includes('amber') || c.includes('yellow') || c.includes('orange')) {
+                  return 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs';
                 }
-                if (rawColor.includes('purple') || rawColor.includes('pink') || rawColor.includes('rose')) {
-                  return 'border-primary/20 bg-primary/5 hover:bg-primary/10 dark:bg-primary/10 text-foreground';
+                if (c.includes('purple') || c.includes('violet') || c.includes('indigo')) {
+                  return 'bg-violet-600 hover:bg-violet-700 text-white shadow-xs';
+                }
+                if (c.includes('rose') || c.includes('pink') || c.includes('red')) {
+                  return 'bg-rose-500 hover:bg-rose-600 text-white shadow-xs';
+                }
+                if (c.includes('primary')) {
+                  return 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs';
                 }
 
-                return 'border-border/70 bg-muted/30 hover:bg-muted/50 text-foreground';
+                return 'bg-zinc-700 hover:bg-zinc-600 text-white shadow-xs';
               };
 
               const modernColorClass = getModernMinimalColor(event.color);
@@ -197,7 +204,7 @@ export function Timeblock({
                 <div
                   key={event.id}
                   className={`${eventCardClass} ${
-                    isSingleRow ? 'px-2.5 py-0.5 justify-center' : 'px-2.5 py-1.5 justify-start gap-0.5'
+                    isSingleRow ? 'px-3 py-1 justify-center' : 'px-3 py-1.5 justify-start gap-1'
                   }`}
                   style={{
                     top: `${pos.top + 2}px`,
@@ -211,30 +218,42 @@ export function Timeblock({
                   title={`${event.title} (${startFormatted} - ${endFormatted})`}
                 >
                   {isSingleRow ? (
-                    // Chỉ đủ 1 hàng: bỏ dòng thời gian riêng, ưu tiên label + khoảng thời gian kế bên
-                    <div className="flex items-center gap-1.5 w-full min-w-0 leading-none">
-                      <span className="font-medium text-[11px] text-foreground truncate">
-                        {event.title}
-                      </span>
-                      <span className="text-[10px] font-mono text-muted-foreground shrink-0">
-                        ({durationFormatted})
+                    // Xếp ngang trên 1 hàng: Tiêu đề + Khung giờ (12:00 - 13:00) + Badge thời lượng (1h)
+                    <div className="flex items-center justify-between gap-2 w-full min-w-0 h-full font-sans">
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                        <span className="font-bold text-xs truncate">
+                          {event.title}
+                        </span>
+                        {pos.height >= 30 && (
+                          <span className="text-[10px] font-sans font-medium opacity-85 shrink-0">
+                            {startFormatted} – {endFormatted}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[9.5px] font-sans font-bold px-1.5 py-0.5 rounded bg-black/20 text-current shrink-0 leading-none">
+                        {durationFormatted}
                       </span>
                     </div>
                   ) : (
-                    // Đủ từ 2 hàng trở lên: hiển thị label và thời gian phía dưới
-                    <>
-                      <span className="font-semibold text-xs text-foreground truncate leading-snug block">
-                        {event.title}
-                      </span>
-                      <span className="text-[10px] font-mono text-muted-foreground truncate leading-tight block">
-                        {startFormatted} - {endFormatted} ({durationFormatted})
-                      </span>
-                      {pos.height >= 60 && event.note && (
-                        <span className="text-[10px] text-muted-foreground/75 truncate block italic">
-                          {event.note}
+                    // Đủ từ 2 hàng trở lên (> 48px): Hiển thị nhiều tầng thông tin thoải mái
+                    <div className="flex flex-col gap-1 w-full min-w-0 font-sans">
+                      <div className="flex items-start justify-between gap-1 w-full min-w-0">
+                        <span className="font-bold text-xs tracking-tight leading-snug truncate">
+                          {event.title}
                         </span>
+                        <span className="text-[9.5px] font-sans font-bold px-1.5 py-0.5 rounded bg-black/20 text-current shrink-0 leading-none">
+                          {durationFormatted}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[10px] font-sans font-medium opacity-85 leading-tight">
+                        <span>{startFormatted} – {endFormatted}</span>
+                      </div>
+                      {pos.height >= 60 && event.note && (
+                        <p className="text-[10px] font-medium opacity-75 truncate leading-tight mt-0.5">
+                          {event.note}
+                        </p>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
               );
@@ -246,8 +265,8 @@ export function Timeblock({
                 className="absolute left-0 right-0 flex items-center z-20 pointer-events-none"
                 style={{ top: `${currentTimePosition}px` }}
               >
-                <div className="w-2 h-2 rounded-full bg-destructive -ml-1 flex-shrink-0" />
-                <div className="flex-1 h-[1.5px] bg-destructive/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)] -ml-1 flex-shrink-0 ring-2 ring-background" />
+                <div className="flex-1 h-[2px] bg-rose-500/90 shadow-xs" />
               </div>
             )}
 
